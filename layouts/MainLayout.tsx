@@ -1,10 +1,10 @@
 import Navbar from "@/components/Navbar";
 import { Container } from "@mui/material";
 
-import React, { ReactElement } from "react";
+import React, { ReactElement, ReactNode } from "react";
 
 interface MainLoyaoutProps {
-  children: ReactElement;
+  children: ReactNode;
 }
 
 export default function MainLayout({ children }: MainLoyaoutProps) {
