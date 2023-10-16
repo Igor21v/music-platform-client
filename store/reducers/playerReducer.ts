@@ -25,5 +25,7 @@ export const playerReducer = (
       return { ...state, duration: action.payload };
     case PlayerActionTypes.SET_ACTIVE:
       return { ...state, active: action.payload, duration: 0, currentTime: 0 };
+    default:
+      return state;
   }
 };
