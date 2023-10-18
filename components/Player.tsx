@@ -24,14 +24,33 @@ export default function Player() {
   useEffect(() => {
     if (!audio) {
       audio = new Audio();
-      audio.src = track.audio;
+    } else {
+      setAudio();
+      if (active) {
+        playTrack();
+        audio.play();
+        audio.volume = volume / 100;
+      }
     }
-  });
+  }, [active]);
+
+  const setAudio = () => {
+    if (active) {
+      audio.src = active.audio;
+      audio.onloadedmetadata = () => {
+        setDuration(Math.ceil(audio.duration));
+      };
+      audio.ontimeupdate = () => {
+        setCurrentTime(Math.ceil(audio.currentTime));
+      };
+    }
+  };
+
   const play = () => {
+    console.log(pause);
     if (pause) {
       playTrack();
       audio.play();
-      audio.volume = volume / 100;
     } else {
       pauseTrack();
       audio.pause();
@@ -41,19 +60,15 @@ export default function Player() {
     setVolume(Number(e.target.value));
     audio.volume = Number(e.target.value) / 100;
   };
-
-  const track: ITrack = {
-    id: "1",
-    name: "Трек1",
-    artist: "Исполнитель 1",
-    text: "Any text",
-    listens: 5,
-    audio:
-      "http://localhost:5000/audio/11a148dc-1dfc-40b6-a099-219b81ea3b0a.mp3",
-    picture:
-      "http://localhost:5000/image/a648e588-fcb7-43d6-a300-4a30127b8c34.jpg",
-    comments: [],
+  const changeCurrentTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCurrentTime(Number(e.target.value));
+    audio.currentTime = Number(e.target.value);
   };
+
+  if (!active) {
+    return null;
+  }
+
   return (
     <div className={cls.player}>
       <IconButton onClick={play}>
@@ -64,10 +79,14 @@ export default function Player() {
         direction="column"
         style={{ width: 200, margin: "0 20px" }}
       >
-        <div>{track.name}</div>
-        <div style={{ fontSize: 12, color: "gray" }}>{track.artist}</div>
+        <div>{active?.name}</div>
+        <div style={{ fontSize: 12, color: "gray" }}>{active?.artist}</div>
       </Grid>
-      <TrackProgress left={0} right={0} onChange={() => {}} />
+      <TrackProgress
+        left={currentTime}
+        right={duration}
+        onChange={changeCurrentTime}
+      />
       <VolumeUp style={{ marginLeft: "auto" }} />
       <TrackProgress left={volume} right={100} onChange={changeVolume} />
     </div>
