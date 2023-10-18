@@ -3,22 +3,45 @@ import { useTypedSelector } from "@/hooks/useTypedSelector";
 import { ITrack } from "@/types/tracks";
 import { Pause, PlayArrow, VolumeUp } from "@mui/icons-material";
 import { Grid, IconButton } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import cls from "../styles/Player.module.scss";
 import TrackProgress from "./TrackProgress";
+
+let audio: HTMLAudioElement;
 
 export default function Player() {
   const { active, currentTime, duration, pause, volume } = useTypedSelector(
     (state) => state.player
   );
-  const { playTrack, pauseTrack } = useActions();
+  const {
+    playTrack,
+    pauseTrack,
+    setVolume,
+    setCurrentTime,
+    setDuration,
+    setActiveTrack,
+  } = useActions();
+  useEffect(() => {
+    if (!audio) {
+      audio = new Audio();
+      audio.src = track.audio;
+    }
+  });
   const play = () => {
     if (pause) {
       playTrack();
+      audio.play();
+      audio.volume = volume / 100;
     } else {
       pauseTrack();
+      audio.pause();
     }
   };
+  const changeVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setVolume(Number(e.target.value));
+    audio.volume = Number(e.target.value) / 100;
+  };
+
   const track: ITrack = {
     id: "1",
     name: "Трек1",
@@ -34,7 +57,7 @@ export default function Player() {
   return (
     <div className={cls.player}>
       <IconButton onClick={play}>
-        {pause ? <Pause /> : <PlayArrow />}
+        {!pause ? <Pause /> : <PlayArrow />}
       </IconButton>
       <Grid
         container
@@ -46,7 +69,7 @@ export default function Player() {
       </Grid>
       <TrackProgress left={0} right={0} onChange={() => {}} />
       <VolumeUp style={{ marginLeft: "auto" }} />
-      <TrackProgress left={0} right={0} onChange={() => {}} />
+      <TrackProgress left={volume} right={100} onChange={changeVolume} />
     </div>
   );
 }

@@ -12,7 +12,7 @@ export default function TrackProgress(props: TrackProgressProps) {
     <div style={{ display: "flex" }}>
       <input
         type="range"
-        min={left}
+        min={0}
         max={right}
         value={left}
         onChange={onChange}
