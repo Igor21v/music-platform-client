@@ -5,7 +5,7 @@ const initialState: TrackState = {
   error: "",
 };
 
-export const rtackReducer = (
+export const trackReducer = (
   state = initialState,
   action: TrackAction
 ): TrackState => {
