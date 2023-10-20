@@ -35,7 +35,9 @@ export default function TrackPage({ serverTrack }: TrackPageProps) {
   };
 
   return (
-    <MainLayout>
+    <MainLayout
+      title={track.name + " - " + track.artist + " - Музыкальная площадка"}
+    >
       <Button
         variant="outlined"
         style={{ fontSize: 32 }}
