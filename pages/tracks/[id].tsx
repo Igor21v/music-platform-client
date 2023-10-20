@@ -9,7 +9,7 @@ import React from "react";
 export default function TrackPage() {
   const router = useRouter();
   const track: ITrack = {
-    id: "1",
+    _id: "1",
     name: "Трек1",
     artist: "Исполнитель 1",
     text: "Any text",

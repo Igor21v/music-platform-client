@@ -5,7 +5,7 @@ export interface IComment {
 }
 
 export interface ITrack {
-  id: string;
+  _id: string;
   name: string;
   artist: string;
   text: string;

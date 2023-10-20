@@ -20,17 +20,23 @@ export default function TrackItem({ track, active = false }: TrackItemProps) {
     setActiveTrack(track);
     playTrack();
   };
+  console.log("track id " + JSON.stringify(track));
   return (
     <Card
       className={cls.track}
       onClick={() => {
-        router.push("/tracks/" + track.id);
+        router.push("/tracks/" + track._id);
       }}
     >
       <IconButton onClick={play}>
         {active ? <Pause /> : <PlayArrow />}
       </IconButton>
-      <img width={70} height={70} src={track.picture} alt={track.name} />
+      <img
+        width={70}
+        height={70}
+        src={"http://localhost:5000/" + track.picture}
+        alt={track.name}
+      />
       <Grid
         container
         direction="column"
