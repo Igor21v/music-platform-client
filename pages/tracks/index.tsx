@@ -2,15 +2,30 @@ import TrackList from "@/components/TrackList";
 import { useTypedSelector } from "@/hooks/useTypedSelector";
 import MainLayout from "@/layouts/MainLayout";
 import { NextThunkDispatch, wrapper } from "@/store";
-import { fetchTracks } from "@/store/actions-creators/track";
+import { fetchTracks, searchTracks } from "@/store/actions-creators/track";
 import { ITrack } from "@/types/tracks";
-import { Box, Button, Card, Grid } from "@mui/material";
+import { Box, Button, Card, Grid, TextField } from "@mui/material";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
+import { useDispatch } from "react-redux";
 
 export default function Index() {
   const router = useRouter();
   const { error, tracks } = useTypedSelector((state) => state.track);
+  const [query, setQuery] = useState("");
+  const [timer, setTimer] = useState<NodeJS.Timeout>();
+  const dispatch = useDispatch() as NextThunkDispatch;
+  const search = async (e: ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+    if (timer) {
+      clearTimeout(timer);
+    }
+    setTimer(
+      setTimeout(async () => {
+        await dispatch(await searchTracks(e.target.value));
+      }, 500)
+    );
+  };
 
   if (error) {
     return (
@@ -32,6 +47,7 @@ export default function Index() {
               </Button>
             </Grid>
           </Box>
+          <TextField fullWidth value={query} onChange={search} />
           <TrackList tracks={tracks} />
         </Card>
       </Grid>
