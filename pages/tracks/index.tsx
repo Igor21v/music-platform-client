@@ -55,7 +55,7 @@ export default function Index() {
   );
 }
 
-export const getServerSideProps = wrapper.getServerSideProps(
+export const getStaticProps = wrapper.getServerSideProps(
   (store) => async () => {
     const dispatch = store.dispatch as NextThunkDispatch;
     await dispatch(await fetchTracks());
